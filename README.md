@@ -1,23 +1,25 @@
 # Vuex-Functional
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ec0befb33e6426bb85f60038fe62ca3)](https://www.codacy.com/manual/stevethedev/vuex-functional?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stevethedev/vuex-functional&amp;utm_campaign=Badge_Grade)
+
 This TypeScript library provides a set of functions that reveal the committers,
 dispatchers, getters, state, and modules of Vuex stores in the Vue-Composition
 API. The goal of this project is to provide TypeScript hinting with low-overhead
 and zero configuration.
 
-# Browser Support
+## Browser Support
 
 This library should work in any browser that supports ES6. It does, however, use
 JavaScript Proxies — IE11 is not supported, and there are no plans to support it
 in the future.
 
-# Installation
+## Installation
 
 ```bash
 npm i vuex-functional
 ```
 
-# Usage
+## Usage
 
 This section explains how to extract content from the store. For the following examples, this is the store file:
 
@@ -63,12 +65,12 @@ export const options = {
 };
 ```
 
-## Get the Store object
+### Get the Store object
 
 Both the original `Vue.extend` and Composition API are supported, but this was
 mostly created to support the Composition API.
 
-### Extract the store from the Vue Composition API
+#### Extract the store from the Vue Composition API
 
 ```typescript
 import { createComponent } from "@vue/composition-api";
@@ -87,7 +89,7 @@ export default createComponent({
 });
 ```
 
-### Extract the store from the Vue 2.0 APIs
+#### Extract the store from the Vue 2.0 APIs
 
 ```typescript
 import Vue from "vue";
@@ -106,7 +108,7 @@ export default Vue.extend({
 });
 ```
 
-## Store state and getters
+### Store state and getters
 
 State and getters behave exactly the same way they would if you were to access
 them directly.
@@ -125,7 +127,7 @@ $state.number; // 1
 $getters.get_number; // 1
 ```
 
-## Store actions and mutations
+### Store actions and mutations
 
 Actions and mutations now use Proxies to forward the action or mutation name on
 to the store. If you didn't define a payload in the function, then the payload
@@ -148,7 +150,7 @@ await $actions.no_payload(); // `true`
 state($store).number; // 9
 ```
 
-## Store modules
+### Store modules
 
 Modules can also be extracted, and passed back into the other functions to
 access their methods and state:
@@ -170,7 +172,7 @@ state($store).string; // "hello, world!"
 state($barModule).bar; // "hello, world!"
 ```
 
-## All accessors at once
+### All accessors at once
 
 ```typescript
 import { makeAccessors, store } from "vuex-functional";
