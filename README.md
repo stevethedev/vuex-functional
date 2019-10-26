@@ -1,6 +1,8 @@
 # Vuex-Functional
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2ec0befb33e6426bb85f60038fe62ca3)](https://www.codacy.com/manual/stevethedev/vuex-functional?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stevethedev/vuex-functional&amp;utm_campaign=Badge_Grade)
+[![CodeFactor](https://www.codefactor.io/repository/github/stevethedev/vuex-functional/badge)](https://www.codefactor.io/repository/github/stevethedev/vuex-functional)
+[![Snyk](https://img.shields.io/snyk/vulnerabilities/github/stevethedev/vuex-functional)](https://img.shields.io/snyk/vulnerabilities/github/stevethedev/vuex-functional)
 
 This TypeScript library provides a set of functions that reveal the committers,
 dispatchers, getters, state, and modules of Vuex stores in the Vue-Composition
