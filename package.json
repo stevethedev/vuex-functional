@@ -1,10 +1,16 @@
 {
-  "name": "typed-vuex",
+  "name": "functional-vuex",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage"
+    "build": "npm run build:es && npm run build:cjs",
+    "build:es": "tsc --module esnext --outDir dist/es",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
+    "test": "jest --coverage",
+    "lint": "npm run lint:tsc && npm run lint:tslint",
+    "lint:tsc": "tsc --noEmit",
+    "lint:tslint": "tslint -c tslint.json -p ."
   },
   "author": "Steven Jimenez <steven@stevethedev.com>",
   "license": "MIT",
