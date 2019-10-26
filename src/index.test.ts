@@ -299,7 +299,7 @@ test("can read module actions", done => {
         const $dispatch = FunctionalVuex.actions($storeOptions);
         const $state = FunctionalVuex.state($storeOptions);
 
-        const str = Math.random().toString(32);
+        const str = Math.random().toString();
 
         await Promise.all([
           $dispatch.action_payload({ string: str }),
