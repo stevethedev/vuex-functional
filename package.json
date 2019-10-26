@@ -1,8 +1,21 @@
 {
   "name": "functional-vuex",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Functional-style accessors for the Vuex store",
+  "keywords": [
+    "vuex",
+    "vue",
+    "composition",
+    "api",
+    "functional",
+    "accessor"
+  ],
+  "homepage": "https://github.com/stevethedev/vuex-functional#readme",
+  "bugs": {
+    "url": "https://github/com/stevethedev/vuex-functional/issues"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
   "scripts": {
     "build": "npm run build:es && npm run build:cjs",
     "build:es": "tsc --module esnext --outDir dist/es",
@@ -12,7 +25,11 @@
     "lint:tsc": "tsc --noEmit",
     "lint:tslint": "tslint -c tslint.json -p ."
   },
-  "author": "Steven Jimenez <steven@stevethedev.com>",
+  "author": {
+    "name": "Steven Jimenez",
+    "email": "steven@stevethedev.com>",
+    "url": "https://www.stevethedev.com"
+  },
   "license": "MIT",
   "dependencies": {
     "@vue/composition-api": "^0.3.2",
