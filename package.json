@@ -1,5 +1,5 @@
 {
-  "name": "functional-vuex",
+  "name": "vuex-functional",
   "version": "1.0.0",
   "description": "Functional-style accessors for the Vuex store",
   "keywords": [
@@ -27,7 +27,7 @@
   },
   "author": {
     "name": "Steven Jimenez",
-    "email": "steven@stevethedev.com>",
+    "email": "steven@stevethedev.com",
     "url": "https://www.stevethedev.com"
   },
   "license": "MIT",
