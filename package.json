@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest --coverage"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Steven Jimenez <steven@stevethedev.com>",
+  "license": "MIT",
   "dependencies": {
     "@vue/composition-api": "^0.3.2",
     "vue": "^2.6.10",
