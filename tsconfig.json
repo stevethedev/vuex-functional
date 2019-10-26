@@ -20,10 +20,13 @@
     "noEmitHelpers": true,
     "importHelpers": true,
     "esModuleInterop": true,
-    "rootDir": ".",
+    "rootDir": "src",
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
-    "plugins": [{ "name": "ts-vue-plugin" }]
+    "plugins": [{ "name": "ts-vue-plugin" }],
+    "outDir": "dist",
+    "alwaysStrict": true
   },
-  "include": ["./src/**/*", "src/types.d.ts"]
+  "include": ["./src/**/*", "src/types.d.ts"],
+  "exclude": ["**/*.test.ts", "**/*.spec.ts"]
 }

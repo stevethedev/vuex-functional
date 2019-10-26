@@ -10,7 +10,7 @@ import vueCompositionApi, {
 // tslint:disable-next-line
 import { createLocalVue, mount } from "@vue/test-utils";
 import Vue from "vue";
-import Vuex from "vuex";
+import Vuex, { Store as VStore } from "vuex";
 import * as TypedVuex from ".";
 
 const storeState = {
@@ -50,8 +50,8 @@ const storeOptions = {
     bar: {
       state: { bar: "bar" },
       mutations: {
-        BAR_SET_STRING(_, payload: string) {
-          TypedVuex.commits<typeof storeOptions>(this as any).SET_STRING({
+        BAR_SET_STRING(this: VStore<any>, _, payload: string) {
+          TypedVuex.commits<typeof storeOptions>(this).SET_STRING({
             string: payload
           });
         }

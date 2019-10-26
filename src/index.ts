@@ -225,7 +225,7 @@ type DispatchChains<OPTIONS> = OPTIONS extends { actions: infer ACTIONS }
     }
   : never;
 
-interface Store<OPTIONS> extends VStore<State<OPTIONS>> {
+export interface Store<OPTIONS> extends VStore<State<OPTIONS>> {
   readonly state: State<OPTIONS>;
 
   readonly getters: Getters<OPTIONS>;
