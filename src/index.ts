@@ -140,22 +140,29 @@ export const modules = <OPTIONS>(s: Store<OPTIONS>): Modules<OPTIONS> => {
 export const mutations = commits;
 export const dispatches = actions;
 
+export const into = <T>(s: VStore<State<T>>): Store<T> => s as any;
+
 /**
  * Creates the full set of accessors from a store.
  *
  * @param $store The store to create accessors from.
  */
 export const makeAccessors = <T>($store: Store<T>) => {
+  const commit = commits($store);
+  const dispatch = actions($store);
   return {
     state: state($store),
-    commit: commits($store),
-    dispatch: actions($store),
+    commit,
+    dispatch,
+    mutations: commit,
+    actions: dispatch,
     getters: getters($store),
     modules: modules($store)
   };
 };
 
 export default {
+  into,
   store,
   state,
   commits,
@@ -212,8 +219,8 @@ type Commits<OPTIONS> = OPTIONS extends { mutations: infer MUTATIONS }
 /**
  * Extracts a single committer.
  */
-type Commit<MUTATION> = Payload<MUTATION> extends undefined
-  ? (payload?: null, options?: CommitOptions) => void
+type Commit<MUTATION> = undefined extends Payload<MUTATION>
+  ? (payload?: Payload<MUTATION>, options?: CommitOptions) => void
   : (payload: Payload<MUTATION>, options?: CommitOptions) => void;
 
 /**
@@ -228,8 +235,11 @@ type Dispatches<OPTIONS> = OPTIONS extends { actions: infer ACTIONS }
 /**
  * Extract a single action.
  */
-type Dispatch<ACTION> = Payload<ACTION> extends undefined
-  ? (payload?: null, options?: CommitOptions) => OptionalReturnType<ACTION>
+type Dispatch<ACTION> = undefined extends Payload<ACTION>
+  ? (
+      payload?: Payload<ACTION>,
+      options?: CommitOptions
+    ) => OptionalReturnType<ACTION>
   : (
       payload: Payload<ACTION>,
       options?: CommitOptions
