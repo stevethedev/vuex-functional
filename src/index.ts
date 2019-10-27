@@ -263,7 +263,9 @@ type Dispatch<ACTION> = undefined extends Payload<ACTION>
 /**
  * Extracts the return type if FN is a function, or else `never`.
  */
-type OptionalReturnType<FN> = FN extends () => infer RET ? RET : never;
+type OptionalReturnType<FN> = FN extends (...args: any[]) => infer RET
+  ? RET
+  : never;
 
 /**
  * Extract the modules, or else `never`.
