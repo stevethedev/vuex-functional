@@ -137,10 +137,25 @@ export const modules = <OPTIONS>(s: Store<OPTIONS>): Modules<OPTIONS> => {
   }) as Modules<OPTIONS>;
 };
 
+/**
+ * Alias for `commits`.
+ */
 export const mutations = commits;
+
+/**
+ * Alias for `actions`.
+ */
 export const dispatches = actions;
 
-export const into = <T>(s: VStore<State<T>>): Store<T> => s as any;
+/**
+ * Converts a `Vuex.Store` into the internal `Store` format.
+ *
+ * This is a convenience function that converts the `Vuex.Store<S>` into a
+ * `Store<O>`, so long as the `S` is equal to `O`'s `state` property.
+ *
+ * @param $store The Vuex.Store object to convert.
+ */
+export const into = <T>($store: VStore<State<T>>): Store<T> => $store as any;
 
 /**
  * Creates the full set of accessors from a store.
