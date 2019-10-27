@@ -42,6 +42,7 @@ const storeOptions = {
   actions: {
     action_payload: async (ctx, payload: { string: string }) => {
       ctx.commit("SET_STRING", payload);
+      return true;
     },
     no_payload: async () => true
   },
