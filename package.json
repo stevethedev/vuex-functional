@@ -1,6 +1,6 @@
 {
   "name": "vuex-functional",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Functional-style accessors for the Vuex store",
   "keywords": [
     "vuex",
@@ -23,7 +23,9 @@
     "test": "jest --coverage",
     "lint": "npm run lint:tsc && npm run lint:tslint",
     "lint:tsc": "tsc --noEmit",
-    "lint:tslint": "tslint -c tslint.json -p ."
+    "lint:tslint": "tslint -c tslint.json -p .",
+    "preversion": "npm run lint && npm run test && npm run build",
+    "prepublish": "npm run lint && npm run test && npm run build"
   },
   "author": {
     "name": "Steven Jimenez",
