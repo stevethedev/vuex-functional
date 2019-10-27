@@ -137,8 +137,25 @@ export const modules = <OPTIONS>(s: Store<OPTIONS>): Modules<OPTIONS> => {
   }) as Modules<OPTIONS>;
 };
 
+/**
+ * Alias for `commits`.
+ */
 export const mutations = commits;
+
+/**
+ * Alias for `actions`.
+ */
 export const dispatches = actions;
+
+/**
+ * Converts a `Vuex.Store` into the internal `Store` format.
+ *
+ * This is a convenience function that converts the `Vuex.Store<S>` into a
+ * `Store<O>`, so long as the `S` is equal to `O`'s `state` property.
+ *
+ * @param $store The Vuex.Store object to convert.
+ */
+export const into = <T>($store: VStore<State<T>>): Store<T> => $store as any;
 
 /**
  * Creates the full set of accessors from a store.
@@ -146,16 +163,21 @@ export const dispatches = actions;
  * @param $store The store to create accessors from.
  */
 export const makeAccessors = <T>($store: Store<T>) => {
+  const commit = commits($store);
+  const dispatch = actions($store);
   return {
     state: state($store),
-    commit: commits($store),
-    dispatch: actions($store),
+    commit,
+    dispatch,
+    mutations: commit,
+    actions: dispatch,
     getters: getters($store),
     modules: modules($store)
   };
 };
 
 export default {
+  into,
   store,
   state,
   commits,
@@ -212,8 +234,8 @@ type Commits<OPTIONS> = OPTIONS extends { mutations: infer MUTATIONS }
 /**
  * Extracts a single committer.
  */
-type Commit<MUTATION> = Payload<MUTATION> extends undefined
-  ? (payload?: null, options?: CommitOptions) => void
+type Commit<MUTATION> = undefined extends Payload<MUTATION>
+  ? (payload?: Payload<MUTATION>, options?: CommitOptions) => void
   : (payload: Payload<MUTATION>, options?: CommitOptions) => void;
 
 /**
@@ -228,8 +250,11 @@ type Dispatches<OPTIONS> = OPTIONS extends { actions: infer ACTIONS }
 /**
  * Extract a single action.
  */
-type Dispatch<ACTION> = Payload<ACTION> extends undefined
-  ? (payload?: null, options?: CommitOptions) => OptionalReturnType<ACTION>
+type Dispatch<ACTION> = undefined extends Payload<ACTION>
+  ? (
+      payload?: Payload<ACTION>,
+      options?: CommitOptions
+    ) => OptionalReturnType<ACTION>
   : (
       payload: Payload<ACTION>,
       options?: CommitOptions
