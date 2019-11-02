@@ -1,6 +1,6 @@
 {
   "name": "vuex-functional",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Functional-style accessors for the Vuex store",
   "keywords": [
     "vuex",
