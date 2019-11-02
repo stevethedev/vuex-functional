@@ -499,34 +499,35 @@ test("getters forward all properties", () => {
   );
 });
 
-test("mutations can have optional payloads", () => {
-  const options = {
-    state: {},
-    mutations: {
-      requiredPayload: (_, _payload: { string: string }) => void 0,
-      optionalPayload: (_, _payload?: { string: string }) => void 0
-    }
-  };
-  const store = FunctionalVuex.into<typeof options>(new Vuex.Store(options));
+// test("mutations can have optional payloads", () => {
+//   const options = {
+//     state: {},
+//     mutations: {
+//       requiredPayload: (_, _payload: { string: string }) => void 0,
+//       optionalPayload: (_, _payload?: { string: string }) => void 0
+//     }
+//   };
+//   const store = FunctionalVuex.into<typeof options>(new Vuex.Store(options));
 
-  FunctionalVuex.mutations(store).optionalPayload();
-  FunctionalVuex.mutations(store).optionalPayload({ string: "test" });
+//   FunctionalVuex.mutations(store).optionalPayload();
+//   FunctionalVuex.mutations(store).optionalPayload({ string: "test" });
 
-  FunctionalVuex.mutations(store).requiredPayload({ string: "foo" });
-});
+//   FunctionalVuex.mutations(store).requiredPayload({ string: "foo" });
+//   FunctionalVuex.mutations(store).requiredPayload();
+// });
 
-test("actions can have optional payloads", () => {
-  const options = {
-    state: {},
-    actions: {
-      requiredPayload: (_, _payload: { string: string }) => void 0,
-      optionalPayload: (_, _payload?: { string: string }) => void 0
-    }
-  };
-  const store = FunctionalVuex.into<typeof options>(new Vuex.Store(options));
+// test("actions can have optional payloads", () => {
+//   const options = {
+//     state: {},
+//     actions: {
+//       requiredPayload: (_, _payload: { string: string }) => void 0,
+//       optionalPayload: (_, _payload?: { string: string }) => void 0
+//     }
+//   };
+//   const store = FunctionalVuex.into<typeof options>(new Vuex.Store(options));
 
-  FunctionalVuex.actions(store).optionalPayload();
-  FunctionalVuex.actions(store).optionalPayload({ string: "test" });
+//   FunctionalVuex.actions(store).optionalPayload();
+//   FunctionalVuex.actions(store).optionalPayload({ string: "test" });
 
-  FunctionalVuex.actions(store).requiredPayload({ string: "foo" });
-});
+//   FunctionalVuex.actions(store).requiredPayload({ string: "foo" });
+// });

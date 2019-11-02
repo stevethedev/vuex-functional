@@ -234,7 +234,7 @@ type Commits<OPTIONS> = OPTIONS extends { mutations: infer MUTATIONS }
 /**
  * Extracts a single committer.
  */
-type Commit<MUTATION> = undefined extends Payload<MUTATION>
+type Commit<MUTATION> = Payload<MUTATION> extends undefined
   ? (payload?: Payload<MUTATION>, options?: CommitOptions) => void
   : (payload: Payload<MUTATION>, options?: CommitOptions) => void;
 
@@ -250,7 +250,7 @@ type Dispatches<OPTIONS> = OPTIONS extends { actions: infer ACTIONS }
 /**
  * Extract a single action.
  */
-type Dispatch<ACTION> = undefined extends Payload<ACTION>
+type Dispatch<ACTION> = Payload<ACTION> extends undefined
   ? (
       payload?: Payload<ACTION>,
       options?: CommitOptions
