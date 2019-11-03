@@ -106,18 +106,21 @@ export const modules = <OPTIONS>(s: Store<OPTIONS>): Modules<OPTIONS> => {
           {
             get: (_, getter) => {
               const gets = mod._rawModule.getters;
-              if (
-                "string" === typeof getter &&
-                Object.getOwnPropertyNames(gets).includes(getter)
-              ) {
-                return gets[getter](
-                  mod.state,
-                  getterProxy,
-                  root.state,
-                  root.getters || s.getters
-                );
+              if (gets) {
+                if (
+                  "string" === typeof getter &&
+                  Object.getOwnPropertyNames(gets).includes(getter)
+                ) {
+                  return gets[getter](
+                    mod.state,
+                    getterProxy,
+                    root.state,
+                    root.getters || s.getters
+                  );
+                }
+                return gets[getter];
               }
-              return gets[getter];
+              return void 0;
             }
           }
         );
