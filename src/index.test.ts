@@ -11,7 +11,7 @@ import vueCompositionApi, {
 import { createLocalVue, mount } from "@vue/test-utils";
 import Vue from "vue";
 import Vuex, { Store as VStore } from "vuex";
-import * as FunctionalVuex from ".";
+import V from ".";
 
 const storeState = {
   string: "string",
@@ -53,7 +53,7 @@ const storeOptions = {
       state: { bar: "bar", number: 1 },
       mutations: {
         BAR_SET_STRING(this: VStore<any>, _, payload: string) {
-          FunctionalVuex.commits<typeof storeOptions>(this).SET_STRING({
+          V.commits<typeof storeOptions>(this).SET_STRING({
             string: payload
           });
         }
@@ -91,11 +91,11 @@ test("can read the store", () => {
       template: "<div />",
       setup: (_, ctx) => {
         expect(ctx).toBeTruthy();
-        expect(FunctionalVuex.store(ctx)).toBeTruthy();
-        expect(FunctionalVuex.store(ctx).commit).toBeTruthy();
-        expect(FunctionalVuex.store(ctx).dispatch).toBeTruthy();
-        expect(FunctionalVuex.store(ctx).state).toBeTruthy();
-        expect(FunctionalVuex.store(ctx).getters).toBeTruthy();
+        expect(V.store(ctx)).toBeTruthy();
+        expect(V.store(ctx).commit).toBeTruthy();
+        expect(V.store(ctx).dispatch).toBeTruthy();
+        expect(V.store(ctx).state).toBeTruthy();
+        expect(V.store(ctx).getters).toBeTruthy();
       }
     }),
     {
@@ -105,13 +105,23 @@ test("can read the store", () => {
   );
 });
 
+test("can convert vanilla Vuex store into a wrapped store", () => {
+  const store = new Vuex.Store(storeOptions);
+
+  const $store = V.into<typeof storeOptions>(store);
+
+  expect($store).toBeDefined();
+  expect($store).toBeInstanceOf(Vuex.Store);
+  expect(($store as any) === (store as any)).toBeTruthy();
+});
+
 test("can read the state", () => {
   mount(
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof storeOptions>(ctx);
-        const $state = FunctionalVuex.state($store);
+        const $store = V.store<typeof storeOptions>(ctx);
+        const $state = V.state($store);
 
         expect($state.array).toEqual(storeState.array);
         expect($state.null).toEqual(storeState.null);
@@ -132,8 +142,8 @@ test("can read getters", () => {
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof storeOptions>(ctx);
-        const $getters = FunctionalVuex.getters($store);
+        const $store = V.store<typeof storeOptions>(ctx);
+        const $getters = V.getters($store);
 
         expect($getters.get_array).toEqual(storeState.array);
         expect($getters.get_null).toEqual(storeState.null);
@@ -152,9 +162,9 @@ test("can read mutations", () => {
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof storeOptions>(ctx);
-        const $commit = FunctionalVuex.commits($store);
-        const $state = FunctionalVuex.state($store);
+        const $store = V.store<typeof storeOptions>(ctx);
+        const $commit = V.commits($store);
+        const $state = V.state($store);
 
         const num = Math.random();
         $commit.SET_NUMBER({ number: num });
@@ -180,9 +190,9 @@ test("can read actions", done => {
     createComponent({
       template: "<div />",
       setup: async (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof storeOptions>(ctx);
-        const $dispatch = FunctionalVuex.actions($store);
-        const $state = FunctionalVuex.state($store);
+        const $store = V.store<typeof storeOptions>(ctx);
+        const $dispatch = V.actions($store);
+        const $state = V.state($store);
 
         const str = Math.random().toString(32);
 
@@ -208,14 +218,14 @@ test("can read modules", () => {
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof storeOptions>(ctx);
-        const { foo: $foo, bar: $bar } = FunctionalVuex.modules($store);
+        const $store = V.store<typeof storeOptions>(ctx);
+        const { foo: $foo, bar: $bar } = V.modules($store);
 
-        expect(FunctionalVuex.state($foo)).toEqual(($store.state as any).foo);
-        expect(FunctionalVuex.state($foo)).toBeTruthy();
+        expect(V.state($foo)).toEqual(($store.state as any).foo);
+        expect(V.state($foo)).toBeTruthy();
 
-        expect(FunctionalVuex.state($bar)).toEqual(($store.state as any).bar);
-        expect(FunctionalVuex.state($bar)).toBeTruthy();
+        expect(V.state($bar)).toEqual(($store.state as any).bar);
+        expect(V.state($bar)).toBeTruthy();
       }
     }),
     {
@@ -234,10 +244,10 @@ test("can read module getters", () => {
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof newOptions>(ctx);
-        const { storeOptions: $storeOptions } = FunctionalVuex.modules($store);
+        const $store = V.store<typeof newOptions>(ctx);
+        const { storeOptions: $storeOptions } = V.modules($store);
 
-        const $getters = FunctionalVuex.getters($storeOptions);
+        const $getters = V.getters($storeOptions);
 
         expect($getters.get_array).toEqual(storeState.array);
         expect($getters.get_null).toEqual(storeState.null);
@@ -260,11 +270,11 @@ test("can read module mutations", () => {
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof newOptions>(ctx);
-        const { storeOptions: $storeOptions } = FunctionalVuex.modules($store);
+        const $store = V.store<typeof newOptions>(ctx);
+        const { storeOptions: $storeOptions } = V.modules($store);
 
-        const $commit = FunctionalVuex.commits($storeOptions);
-        const $state = FunctionalVuex.state($storeOptions);
+        const $commit = V.commits($storeOptions);
+        const $state = V.state($storeOptions);
 
         const num = Math.random();
         $commit.SET_NUMBER({ number: num });
@@ -294,11 +304,11 @@ test("can read module actions", done => {
     createComponent({
       template: "<div />",
       setup: async (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof newOptions>(ctx);
-        const { storeOptions: $storeOptions } = FunctionalVuex.modules($store);
+        const $store = V.store<typeof newOptions>(ctx);
+        const { storeOptions: $storeOptions } = V.modules($store);
 
-        const $dispatch = FunctionalVuex.actions($storeOptions);
-        const $state = FunctionalVuex.state($storeOptions);
+        const $dispatch = V.actions($storeOptions);
+        const $state = V.state($storeOptions);
 
         const str = Math.random().toString();
 
@@ -328,19 +338,15 @@ test("can read module modules", () => {
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof newOptions>(ctx);
-        const { storeOptions: $storeOptions } = FunctionalVuex.modules($store);
-        const { foo: $foo, bar: $bar } = FunctionalVuex.modules($storeOptions);
+        const $store = V.store<typeof newOptions>(ctx);
+        const { storeOptions: $storeOptions } = V.modules($store);
+        const { foo: $foo, bar: $bar } = V.modules($storeOptions);
 
-        expect(FunctionalVuex.state($foo)).toEqual(
-          ($store.state as any).storeOptions.foo
-        );
-        expect(FunctionalVuex.state($foo)).toBeTruthy();
+        expect(V.state($foo)).toEqual(($store.state as any).storeOptions.foo);
+        expect(V.state($foo)).toBeTruthy();
 
-        expect(FunctionalVuex.state($bar)).toEqual(
-          ($store.state as any).storeOptions.bar
-        );
-        expect(FunctionalVuex.state($bar)).toBeTruthy();
+        expect(V.state($bar)).toEqual(($store.state as any).storeOptions.bar);
+        expect(V.state($bar)).toBeTruthy();
       }
     }),
     {
@@ -352,25 +358,22 @@ test("can read module modules", () => {
 
 test("can read non-namespaced module modules", () => {
   const newOptions = {
+    state: {},
     modules: { storeOptions: { ...storeOptions, namespaced: false } }
   };
   mount(
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof newOptions>(ctx);
-        const { storeOptions: $storeOptions } = FunctionalVuex.modules($store);
-        const { foo: $foo, bar: $bar } = FunctionalVuex.modules($storeOptions);
+        const $store = V.store<typeof newOptions>(ctx);
+        const { storeOptions: $storeOptions } = V.modules($store);
+        const { foo: $foo, bar: $bar } = V.modules($storeOptions);
 
-        expect(FunctionalVuex.state($foo)).toEqual(
-          ($store.state as any).storeOptions.foo
-        );
-        expect(FunctionalVuex.state($foo)).toBeTruthy();
+        expect(V.state($foo)).toEqual(($store.state as any).storeOptions.foo);
+        expect(V.state($foo)).toBeTruthy();
 
-        expect(FunctionalVuex.state($bar)).toEqual(
-          ($store.state as any).storeOptions.bar
-        );
-        expect(FunctionalVuex.state($bar)).toBeTruthy();
+        expect(V.state($bar)).toEqual(($store.state as any).storeOptions.bar);
+        expect(V.state($bar)).toBeTruthy();
       }
     }),
     {
@@ -381,9 +384,7 @@ test("can read non-namespaced module modules", () => {
 });
 
 test("throws if the store is invalid", () => {
-  expect(() =>
-    FunctionalVuex.store(({} as any) as SetupContext)
-  ).toThrowError();
+  expect(() => V.store(({} as any) as SetupContext)).toThrowError();
 });
 
 test("works on old-style components if the store is invalid", () => {
@@ -391,7 +392,7 @@ test("works on old-style components if the store is invalid", () => {
     Vue.extend({
       template: "<div />",
       mounted() {
-        const $store = FunctionalVuex.store<typeof storeOptions>(this);
+        const $store = V.store<typeof storeOptions>(this);
 
         expect($store).toBeTruthy();
       }
@@ -408,9 +409,9 @@ test("doesn't break missing getter content", () => {
     Vue.extend({
       template: "<div />",
       mounted() {
-        const $store = FunctionalVuex.store<typeof storeOptions>(this);
+        const $store = V.store<typeof storeOptions>(this);
 
-        expect((FunctionalVuex.getters($store) as any)[1]).toBeUndefined();
+        expect((V.getters($store) as any)[1]).toBeUndefined();
       }
     }),
     {
@@ -425,16 +426,16 @@ test("make accessors", done => {
     Vue.extend({
       template: "<div />",
       async mounted() {
-        const $store = FunctionalVuex.store<typeof storeOptions>(this);
+        const $store = V.store<typeof storeOptions>(this);
 
-        const accessors = FunctionalVuex.makeAccessors($store);
+        const accessors = V.makeAccessors($store);
 
         expect(accessors.getters.get_array).toEqual(
-          FunctionalVuex.getters($store).get_array
+          V.getters($store).get_array
         );
 
-        expect(FunctionalVuex.state(accessors.modules.foo).baz).toEqual(
-          FunctionalVuex.state(FunctionalVuex.modules($store).foo).baz
+        expect(V.state(accessors.modules.foo).baz).toEqual(
+          V.state(V.modules($store).foo).baz
         );
 
         const num = 12345;
@@ -461,14 +462,11 @@ test("access store from within store", () => {
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $bar = FunctionalVuex.modules(
-          FunctionalVuex.store<typeof storeOptions>(ctx)
-        ).bar;
-        FunctionalVuex.commits($bar).BAR_SET_STRING("blablahblah");
-        expect(
-          FunctionalVuex.state(FunctionalVuex.store<typeof storeOptions>(ctx))
-            .string
-        ).toEqual("blablahblah");
+        const $bar = V.modules(V.store<typeof storeOptions>(ctx)).bar;
+        V.commits($bar).BAR_SET_STRING("blablahblah");
+        expect(V.state(V.store<typeof storeOptions>(ctx)).string).toEqual(
+          "blablahblah"
+        );
       }
     }),
     {
@@ -483,10 +481,8 @@ test("getters forward all properties", () => {
     createComponent({
       template: "<div />",
       setup: (_, ctx) => {
-        const $store = FunctionalVuex.store<typeof storeOptions>(ctx);
-        const $bar = FunctionalVuex.makeAccessors(
-          FunctionalVuex.modules($store).bar
-        );
+        const $store = V.store<typeof storeOptions>(ctx);
+        const $bar = V.makeAccessors(V.modules($store).bar);
 
         // tslint:disable-next-line
         expect($bar.getters.get_number_sum).toEqual(4);
@@ -507,13 +503,13 @@ test("getters forward all properties", () => {
 //       optionalPayload: (_, _payload?: { string: string }) => void 0
 //     }
 //   };
-//   const store = FunctionalVuex.into<typeof options>(new Vuex.Store(options));
+//   const store = V.into<typeof options>(new Vuex.Store(options));
 
-//   FunctionalVuex.mutations(store).optionalPayload();
-//   FunctionalVuex.mutations(store).optionalPayload({ string: "test" });
+//   V.mutations(store).optionalPayload();
+//   V.mutations(store).optionalPayload({ string: "test" });
 
-//   FunctionalVuex.mutations(store).requiredPayload({ string: "foo" });
-//   FunctionalVuex.mutations(store).requiredPayload();
+//   V.mutations(store).requiredPayload({ string: "foo" });
+//   V.mutations(store).requiredPayload();
 // });
 
 // test("actions can have optional payloads", () => {
@@ -524,10 +520,10 @@ test("getters forward all properties", () => {
 //       optionalPayload: (_, _payload?: { string: string }) => void 0
 //     }
 //   };
-//   const store = FunctionalVuex.into<typeof options>(new Vuex.Store(options));
+//   const store = V.into<typeof options>(new Vuex.Store(options));
 
-//   FunctionalVuex.actions(store).optionalPayload();
-//   FunctionalVuex.actions(store).optionalPayload({ string: "test" });
+//   V.actions(store).optionalPayload();
+//   V.actions(store).optionalPayload({ string: "test" });
 
-//   FunctionalVuex.actions(store).requiredPayload({ string: "foo" });
+//   V.actions(store).requiredPayload({ string: "foo" });
 // });
