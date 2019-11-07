@@ -1,6 +1,7 @@
 import { DispatchOptions } from "vuex";
 import { Payload } from "./mutations";
 import { Options } from "./options";
+import { proxyFactory } from "./proxies";
 import { Store } from "./store";
 
 /**
@@ -9,13 +10,7 @@ import { Store } from "./store";
  * @param s The store to load actions from.
  */
 export const actions = <O extends Options<any>>(s: Store<O>): Actions<O> => {
-  return new Proxy(
-    {},
-    {
-      get: (_target, prop) => (payload?: any, options?: DispatchOptions) =>
-        s.dispatch(prop as string, payload, options)
-    }
-  ) as any;
+  return new Proxy({}, proxyFactory(s, "dispatch"));
 };
 
 /**

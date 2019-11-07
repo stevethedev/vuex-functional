@@ -1,5 +1,6 @@
-import { CommitOptions, DispatchOptions } from "vuex";
+import { CommitOptions } from "vuex";
 import { Options } from "./options";
+import { proxyFactory } from "./proxies";
 import { Store } from "./store";
 
 /**
@@ -8,13 +9,7 @@ import { Store } from "./store";
  * @param s The store to load commits from.
  */
 export const mutations = <O extends Options<any>>(s: Store<O>): Commits<O> => {
-  return new Proxy(
-    {},
-    {
-      get: (_target, prop) => (payload?: any, options?: DispatchOptions) =>
-        s.commit(prop as string, payload, options)
-    }
-  ) as any;
+  return new Proxy({}, proxyFactory(s, "commit"));
 };
 
 /**
