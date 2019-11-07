@@ -36,22 +36,8 @@ const isComponent = (x: any): x is VueComponent => Boolean(x.$store);
 const extractStore = <O extends Options<any>>(
   target: VueComponent | null
 ): Store<O> | null => {
-  if (target) {
-    if (target.$store) {
-      return target.$store as Store<O>;
-    }
-    if (target.$children && target.$children[0] && target.$children[0].$store) {
-      return target.$children[0].$store as Store<O>;
-    }
-  }
-  return null;
+  return target?.$store || target?.$children?.[0]?.$store || null;
 };
-
-/*
- |-----------------------------------------------------------------------------
- | TYPES
- |-----------------------------------------------------------------------------
- */
 
 /**
  * Extends the Vuex.Store type to ensure compatibility with Vuex-proper.

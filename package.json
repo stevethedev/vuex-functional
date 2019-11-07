@@ -39,17 +39,17 @@
     "vuex": "^3.1.1"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.21",
+    "@types/jest": "^24.0.22",
     "@vue/test-utils": "^1.0.0-beta.29",
     "jest": "^24.9.0",
-    "jsdom": "^15.2.0",
+    "jsdom": "^15.2.1",
     "jsdom-global": "^3.0.2",
     "prettier": "^1.18.2",
     "ts-jest": "^24.1.0",
     "tslib": "^1.10.0",
-    "tslint": "^5.20.0",
+    "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.6.4",
+    "typescript": "^3.7.2",
     "vue-jest": "^3.0.5",
     "vue-template-compiler": "^2.6.10"
   }

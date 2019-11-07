@@ -88,16 +88,18 @@ const getVue = () => {
 test("can read the store", () => {
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         expect(ctx).toBeTruthy();
         expect(V.store(ctx)).toBeTruthy();
         expect(V.store(ctx).commit).toBeTruthy();
         expect(V.store(ctx).dispatch).toBeTruthy();
         expect(V.store(ctx).state).toBeTruthy();
         expect(V.store(ctx).getters).toBeTruthy();
+
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(storeOptions)
@@ -118,8 +120,8 @@ test("can convert vanilla Vuex store into a wrapped store", () => {
 test("can read the state", () => {
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof storeOptions>(ctx);
         const $state = V.state($store);
 
@@ -128,8 +130,9 @@ test("can read the state", () => {
         expect($state.number).toEqual(storeState.number);
 
         expect($state).toEqual($store.state);
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(storeOptions)
@@ -140,16 +143,17 @@ test("can read the state", () => {
 test("can read getters", () => {
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof storeOptions>(ctx);
         const $getters = V.getters($store);
 
         expect($getters.get_array).toEqual(storeState.array);
         expect($getters.get_null).toEqual(storeState.null);
         expect($getters.get_number).toEqual(storeState.number);
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(storeOptions)
@@ -160,8 +164,8 @@ test("can read getters", () => {
 test("can read mutations", () => {
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof storeOptions>(ctx);
         const $commit = V.commits($store);
         const $state = V.state($store);
@@ -176,8 +180,9 @@ test("can read mutations", () => {
 
         expect($state.number).toEqual(num);
         expect($state.string).toEqual(str);
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(storeOptions)
@@ -188,24 +193,24 @@ test("can read mutations", () => {
 test("can read actions", done => {
   mount(
     createComponent({
-      template: "<div />",
-      setup: async (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof storeOptions>(ctx);
         const $dispatch = V.actions($store);
         const $state = V.state($store);
 
         const str = Math.random().toString(32);
 
-        await Promise.all([
+        Promise.all([
           $dispatch.action_payload({ string: str }),
           $dispatch.no_payload()
-        ]);
-
-        expect($state.string).toEqual(str);
-
-        done();
+        ]).then(() => {
+          expect($state.string).toEqual(str);
+          done();
+        });
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(storeOptions)
@@ -216,8 +221,8 @@ test("can read actions", done => {
 test("can read modules", () => {
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof storeOptions>(ctx);
         const { foo: $foo, bar: $bar } = V.modules($store);
 
@@ -226,8 +231,9 @@ test("can read modules", () => {
 
         expect(V.state($bar)).toEqual(($store.state as any).bar);
         expect(V.state($bar)).toBeTruthy();
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(storeOptions)
@@ -242,8 +248,8 @@ test("can read module getters", () => {
   };
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof newOptions>(ctx);
         const { storeOptions: $storeOptions } = V.modules($store);
 
@@ -252,8 +258,9 @@ test("can read module getters", () => {
         expect($getters.get_array).toEqual(storeState.array);
         expect($getters.get_null).toEqual(storeState.null);
         expect($getters.get_number).toEqual(storeState.number);
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(newOptions)
@@ -268,8 +275,8 @@ test("can read module mutations", () => {
   };
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof newOptions>(ctx);
         const { storeOptions: $storeOptions } = V.modules($store);
 
@@ -286,8 +293,9 @@ test("can read module mutations", () => {
 
         expect($state.number).toEqual(num);
         expect($state.string).toEqual(str);
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(newOptions)
@@ -302,8 +310,8 @@ test("can read module actions", done => {
   };
   mount(
     createComponent({
-      template: "<div />",
-      setup: async (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof newOptions>(ctx);
         const { storeOptions: $storeOptions } = V.modules($store);
 
@@ -312,16 +320,50 @@ test("can read module actions", done => {
 
         const str = Math.random().toString();
 
-        await Promise.all([
+        Promise.all([
           $dispatch.action_payload({ string: str }),
           $dispatch.no_payload()
-        ]);
-
-        expect($state.string).toEqual(str);
-
-        done();
+        ]).then(() => {
+          expect($state.string).toEqual(str);
+          done();
+        });
+        return {};
       }
-    }),
+    } as any),
+    {
+      localVue: getVue(),
+      store: new Vuex.Store(newOptions)
+    }
+  );
+});
+
+test("can get values from actions", done => {
+  const newOptions = {
+    ...storeOptions,
+    modules: { storeOptions: { ...storeOptions, namespaced: true } }
+  };
+  mount(
+    createComponent({
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
+        const $store = V.store<typeof newOptions>(ctx);
+        const { storeOptions: $storeOptions } = V.modules($store);
+
+        const $dispatch = V.actions($storeOptions);
+
+        const str = Math.random().toString();
+
+        Promise.all([
+          $dispatch.action_payload({ string: str }),
+          $dispatch.no_payload()
+        ]).then(([payload, no_payload]) => {
+          expect(payload).toEqual(true);
+          expect(no_payload).toEqual(true);
+          done();
+        });
+        return {};
+      }
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(newOptions)
@@ -336,8 +378,8 @@ test("can read module modules", () => {
   };
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof newOptions>(ctx);
         const { storeOptions: $storeOptions } = V.modules($store);
         const { foo: $foo, bar: $bar } = V.modules($storeOptions);
@@ -347,8 +389,9 @@ test("can read module modules", () => {
 
         expect(V.state($bar)).toEqual(($store.state as any).storeOptions.bar);
         expect(V.state($bar)).toBeTruthy();
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(newOptions)
@@ -363,8 +406,8 @@ test("can read non-namespaced module modules", () => {
   };
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof newOptions>(ctx);
         const { storeOptions: $storeOptions } = V.modules($store);
         const { foo: $foo, bar: $bar } = V.modules($storeOptions);
@@ -374,8 +417,9 @@ test("can read non-namespaced module modules", () => {
 
         expect(V.state($bar)).toEqual(($store.state as any).storeOptions.bar);
         expect(V.state($bar)).toBeTruthy();
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(newOptions)
@@ -460,15 +504,16 @@ test("make accessors", done => {
 test("access store from within store", () => {
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $bar = V.modules(V.store<typeof storeOptions>(ctx)).bar;
         V.commits($bar).BAR_SET_STRING("blablahblah");
         expect(V.state(V.store<typeof storeOptions>(ctx)).string).toEqual(
           "blablahblah"
         );
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(storeOptions)
@@ -479,15 +524,16 @@ test("access store from within store", () => {
 test("getters forward all properties", () => {
   mount(
     createComponent({
-      template: "<div />",
-      setup: (_, ctx) => {
+      template: "<div></div>",
+      setup: (_props: never, ctx: SetupContext) => {
         const $store = V.store<typeof storeOptions>(ctx);
         const $bar = V.makeAccessors(V.modules($store).bar);
 
         // tslint:disable-next-line
         expect($bar.getters.get_number_sum).toEqual(4);
+        return {};
       }
-    }),
+    } as any),
     {
       localVue: getVue(),
       store: new Vuex.Store(storeOptions)
