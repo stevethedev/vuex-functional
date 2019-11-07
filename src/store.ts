@@ -38,20 +38,16 @@ const extractStore = <O extends Options<any>>(
 ): Store<O> | null => {
   if (target) {
     if (target.$store) {
-      return target.$store as Store<O>;
+      return target.$store;
     }
-    if (target.$children && target.$children[0] && target.$children[0].$store) {
-      return target.$children[0].$store as Store<O>;
+
+    if (target.$children) {
+      return extractStore(target.$children[0]);
     }
   }
+
   return null;
 };
-
-/*
- |-----------------------------------------------------------------------------
- | TYPES
- |-----------------------------------------------------------------------------
- */
 
 /**
  * Extends the Vuex.Store type to ensure compatibility with Vuex-proper.
