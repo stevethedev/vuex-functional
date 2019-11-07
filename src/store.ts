@@ -36,7 +36,17 @@ const isComponent = (x: any): x is VueComponent => Boolean(x.$store);
 const extractStore = <O extends Options<any>>(
   target: VueComponent | null
 ): Store<O> | null => {
-  return target?.$store || target?.$children?.[0]?.$store || null;
+  if (target) {
+    if (target.$store) {
+      return target.$store;
+    }
+
+    if (target.$children) {
+      return extractStore(target.$children[0]);
+    }
+  }
+
+  return null;
 };
 
 /**
