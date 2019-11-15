@@ -127,9 +127,11 @@ const $getters = getters($store);
 
 $state.number; // 1
 $getters.get_number; // 1
+```
 
 Also...
 
+```
 $store.state.number; // 1
 $store.getters.get_number; // 1
 ```
