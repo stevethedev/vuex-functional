@@ -1,6 +1,6 @@
 {
   "name": "vuex-functional",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Functional-style accessors for the Vuex store",
   "keywords": [
     "vuex",
@@ -16,6 +16,7 @@
   },
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
+  "types": "dist/es/index.d.ts",
   "scripts": {
     "build": "npm run build:es && npm run build:cjs",
     "build:es": "tsc --module esnext --outDir dist/es",
