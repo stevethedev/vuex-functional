@@ -16,6 +16,7 @@
   },
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
+  "types": "dist/es/index.d.ts",
   "scripts": {
     "build": "npm run build:es && npm run build:cjs",
     "build:es": "tsc --module esnext --outDir dist/es",
