@@ -9,7 +9,17 @@ import { Store, store } from "./store";
 
 import { Options } from "./options";
 
-export { actions, getters, modules, mutations, store, state, Store, State };
+export {
+  actions,
+  getters,
+  modules,
+  mutations,
+  store,
+  state,
+  Store,
+  State,
+  Options as StoreOptions,
+};
 
 export const commits = mutations;
 
@@ -45,7 +55,7 @@ export const makeAccessors = <O extends Options<any>>($store: Store<O>) => {
     mutations: commit,
     actions: dispatch,
     getters: getters($store),
-    modules: modules($store)
+    modules: modules($store),
   };
 };
 
@@ -59,5 +69,5 @@ export default {
   modules,
   actions,
   mutations,
-  makeAccessors
+  makeAccessors,
 };

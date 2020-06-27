@@ -1,4 +1,6 @@
-export interface Options<S> {
+import { StoreOptions } from 'vuex';
+
+export interface Options<S> extends StoreOptions<S> {
   state: S | (() => S);
   getters?: {
     [key: string]: (...args: any[]) => any;
