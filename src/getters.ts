@@ -18,4 +18,4 @@ export type Getters<O extends Options<any>> = {
 /**
  * Extracts a single getter.
  */
-type Getter<G> = G extends (...args: any[]) => infer T ? T : never;
+export type Getter<G> = G extends (...args: any[]) => infer T ? T : never;

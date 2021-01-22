@@ -69,39 +69,30 @@ export const options = {
 
 ### Get the Store object
 
-Both the original `Vue.extend` and Composition API are supported, but this was
-mostly created to support the Composition API.
-
-#### Extract the store from the Vue Composition API
+Before the Store object can be retrieved, it must first be injected into the Vue application:
 
 ```typescript
-import { createComponent } from "@vue/composition-api";
+import { createApp } from "vue"
+import { createStore } from "vuex";
+
+import { options } from "path/to/my/store";
+import App from "path/to/App.vue";
+
+createApp(App).use(createStore(options)).mount("#app");
+```
+
+Previous versions of this library supported `Vue.extend` and the Vue 2.0-compatible
+Composition API. They are no longer supported.
+
+```typescript
+import { defineComponent } from "vue";
 import { getters, store } from "vuex-functional";
 import { options } from "path/to/my/store"; //< The options used to create the store
 
-export default createComponent({
+export default defineComponent({
   setup: (_, ctx) => {
     // Extracts the store
     const $store = store<typeof options>(ctx);
-
-    //
-    // Your code goes here
-    //
-  }
-});
-```
-
-#### Extract the store from the Vue 2.0 APIs
-
-```typescript
-import Vue from "vue";
-import { getters, store } from "vuex-functional";
-import { options } from "path/to/my/store"; //< The options used to create the store
-
-export default Vue.extend({
-  mounted() => {
-    // Extracts the store
-    const $store = store<typeof options>(this);
 
     //
     // Your code goes here
