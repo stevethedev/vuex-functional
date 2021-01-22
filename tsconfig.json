@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["es2017", "dom"],
+    "lib": ["ESNext", "dom", "ESNext.AsyncIterable", "ESNext.Symbol"],
     "strict": true,
     "declaration": true,
     "target": "es5",

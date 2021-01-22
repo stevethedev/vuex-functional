@@ -20,25 +20,26 @@ export const modules = <O extends Options<any>>(
   const root: VModule<any> = mods[$root] || (mods as any).root;
   const self: VModule<O> = mods[$self] || root;
 
-  return new Proxy(self._children, {
+  return new Proxy<{ [key: string]: VModule<Options<any>> }>(self._children, {
     get: (children, prop: keyof typeof children) => {
       const mod: VModule<any> | undefined = children[prop];
       if (mod) {
         const getterProxy = new Proxy(mod._rawModule.getters || {}, {
           get: (getters, getter: keyof typeof getters) => {
             if (getters) {
+            const getterVal = getters[getter];
               if (
                 "string" === typeof getter &&
                 Object.getOwnPropertyNames(getters).includes(getter)
               ) {
-                return getters[getter](
+                return (getterVal as any)(
                   mod.state,
                   getterProxy,
                   root.state,
                   root.getters || store.getters
                 );
               }
-              return getters[getter];
+              return getterVal;
             }
             return void 0;
           }
