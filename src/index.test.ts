@@ -427,35 +427,34 @@ test("getters forward all properties", () => {
   );
 });
 
-// test("mutations can have optional payloads", () => {
-//   const options = {
-//     state: {},
-//     mutations: {
-//       requiredPayload: (_, _payload: { string: string }) => void 0,
-//       optionalPayload: (_, _payload?: { string: string }) => void 0
-//     }
-//   };
-//   const store = V.into<typeof options>(new Vuex.Store(options));
+test("mutations can have optional payloads", () => {
+  const options = {
+    state: {},
+    mutations: {
+      requiredPayload: (_: any, _payload: { string: string }) => void 0,
+      optionalPayload: (_: any, _payload?: { string: string }) => void 0
+    }
+  };
+  const store = V.into<typeof options>(createStore(options));
 
-//   V.mutations(store).optionalPayload();
-//   V.mutations(store).optionalPayload({ string: "test" });
+  V.mutations(store).optionalPayload();
+  V.mutations(store).optionalPayload({ string: "test" });
 
-//   V.mutations(store).requiredPayload({ string: "foo" });
-//   V.mutations(store).requiredPayload();
-// });
+  V.mutations(store).requiredPayload({ string: "foo" });
+});
 
-// test("actions can have optional payloads", () => {
-//   const options = {
-//     state: {},
-//     actions: {
-//       requiredPayload: (_, _payload: { string: string }) => void 0,
-//       optionalPayload: (_, _payload?: { string: string }) => void 0
-//     }
-//   };
-//   const store = V.into<typeof options>(new Vuex.Store(options));
+test("actions can have optional payloads", () => {
+  const options = {
+    state: {},
+    actions: {
+      requiredPayload: (_: any, _payload: { string: string }) => Promise.resolve(),
+      optionalPayload: (_: any, _payload?: { string: string }) => Promise.resolve(),
+    }
+  };
+  const store = V.into<typeof options>(createStore(options));
 
-//   V.actions(store).optionalPayload();
-//   V.actions(store).optionalPayload({ string: "test" });
+  V.actions(store).optionalPayload();
+  V.actions(store).optionalPayload({ string: "test" });
 
-//   V.actions(store).requiredPayload({ string: "foo" });
-// });
+  V.actions(store).requiredPayload({ string: "foo" });
+});

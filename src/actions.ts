@@ -16,19 +16,16 @@ export const actions = <O extends Options<any>>(s: Store<O>): Actions<O> => {
 /**
  * Extract the list of actions.
  */
-export type Actions<O extends Options<any>> = {
-  [K in keyof O["actions"]]: O["actions"][K] extends (
-    ...args: any
-  ) => Promise<any>
-    ? Action<O["actions"][K]>
-    : never;
-};
+export type Actions<O extends Options<any>> = O extends { actions: infer A }
+  ? { [K in keyof A]: Action<A[K]> }
+  : never;
+
 
 /**
  * Extracts a single committer.
  */
-export type Action<A extends (...args: any) => Promise<any>> = Payload<
-  A
-> extends undefined
-  ? (payload?: Payload<A>, options?: DispatchOptions) => Promise<ReturnType<A>>
-  : (payload: Payload<A>, options?: DispatchOptions) => Promise<ReturnType<A>>;
+export type Action<A> = A extends (...args: any[]) => infer R
+  ? (Payload<A> extends Exclude<Payload<A>, undefined>
+    ? (payload: Payload<A>, options?: DispatchOptions) => R
+    : (payload?: Payload<A>, options?: DispatchOptions) => R)
+  : never;
