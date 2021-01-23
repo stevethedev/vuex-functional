@@ -17,7 +17,7 @@ interface MutationList {
 }
 
 interface ActionList {
-  [key: string]: (arg: any, payload?: any) => Promise<any>;
+  [key: string]: ((arg: any, payload?: any) => Promise<any>) | ((arg: any, payload?: any) => void);
 }
 
 interface ModuleList {

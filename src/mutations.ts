@@ -17,18 +17,20 @@ export const mutations = <O extends Options<any>>(s: Store<O>): Commits<O> => {
  */
 export type Commits<O extends Options<any>> = O extends { mutations: infer M }
   ? {
-      [K in keyof M]: Commit<M[K]>;
-    }
+    [K in keyof M]: Commit<M[K]>;
+  }
   : never;
 
 /**
  * Extracts a single committer.
  */
-export type Commit<M> = Payload<M> extends undefined
-  ? (payload?: Payload<M>, options?: CommitOptions) => void
-  : (payload: Payload<M>, options?: CommitOptions) => void;
+export type Commit<M> = Payload<M> extends Exclude<Payload<M>, undefined>
+  ? (payload: Payload<M>, options?: CommitOptions) => void
+  : (payload?: Payload<M>, options?: CommitOptions) => void;
 
 /**
  * Extracts the payload type from a callback function.
  */
-export type Payload<F> = F extends (...args: infer T) => unknown ? T[1] : never;
+export type Payload<F> = F extends (arg0: any) => unknown ? (Parameters<F>[1] | undefined | void | never)
+  : F extends (arg0: any, arg1: any) => unknown ? Parameters<F>[1]
+  : never;
